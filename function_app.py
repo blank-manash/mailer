@@ -1,6 +1,8 @@
 import logging
 import azure.functions as func
 from main import main
+from flow_chart import flow_reponse
+import json
 
 app = func.FunctionApp()
 
@@ -25,3 +27,32 @@ def http_mail(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Running HTTP Trigger")
     main()
     return func.HttpResponse("HTTP trigger executed successfully.", status_code=200)
+
+
+@app.function_name("CreateFlowChart")
+@app.route(route="create-flow", auth_level=func.AuthLevel.ANONYMOUS)
+def create_flow(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info("Creating Flow")
+    headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+    }
+
+    # Handle preflight OPTIONS request
+    if req.method == "OPTIONS":
+        # OPTIONS requests may require additional headers
+        return func.HttpResponse(status_code=204, headers=headers)
+    try:
+        text = req.get_json()["text"]
+        flow_json = flow_reponse(text)
+        response = json.dumps(flow_json)
+        return func.HttpResponse(response, status_code=200, headers=headers)
+    except Exception as e:
+        return func.HttpResponse(
+            json.dumps(
+                {"data": f"Error in Receiving Data: {str(e)}", "success": False}
+            ),
+            status_code=400,
+            headers=headers,
+        )
