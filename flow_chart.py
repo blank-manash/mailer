@@ -10,7 +10,7 @@ def create_prompt(text: str) -> str:
 
 Return data in the following JSON Structure:
 {{ "nodes": [...], "links": [...] }}
-The flow chart should optimize learning. Keep it simple and detailed.""".format(
+The flow chart should optimize learning. Keep it simple, clear and detailed. Keep colors light.""".format(
         description=text
     )
 
