@@ -1,6 +1,7 @@
 from enum import Enum
 from azure.appconfiguration import AzureAppConfigurationClient
 from openai import OpenAI
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 import logging
 
 
@@ -73,3 +74,26 @@ RAPID_API_HOST = get("RAPID-API-HOST")
 
 PASSWORD = get("PASSWORD")
 OPENAI_API_KEY = get("OPEN-API-KEY")
+
+
+def get_logger():
+    """
+    Create and configure a logger to send logs to Azure Application Insights.
+    The logger's name will be set to the name of the module where it is imported.
+
+    :param instrumentation_key: Instrumentation key for your Azure Application Insights resource.
+    :return: Configured logger.
+    """
+
+    LOG_KEY = get("LOG-KEY")
+    # Create a logger with the name of the module where it is imported
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+
+    # Create Azure Monitor handler
+    azure_handler = AzureLogHandler(connection_string=f"InstrumentationKey={LOG_KEY}")
+
+    # Add Azure Monitor handler to logger
+    logger.addHandler(azure_handler)
+
+    return logger

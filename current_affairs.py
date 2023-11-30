@@ -1,7 +1,8 @@
 import requests
 import time
-import logging
-from config import RAPID_API_KEY, RAPID_API_HOST
+from config import RAPID_API_KEY, RAPID_API_HOST, get_logger
+
+logger = get_logger()
 
 
 class CurrentAffairs:
@@ -11,15 +12,15 @@ class CurrentAffairs:
         if response.status_code == 200:
             return response.json()
         else:
-            logging.error(f"Error {response.status_code}: {response.text}")
+            logger.error(f"Error {response.status_code}: {response.text}")
         time.sleep(15)
 
     def get(self, key):
         item = self.items[key]
         if item == None:
-            logging.error("An Error Occurred Fetching Item", key)
+            logger.error("An Error Occurred Fetching Item", key)
         if len(item) == 0:
-            logging.error(f"No {key} available")
+            logger.error(f"No {key} available")
             return None
         return item
 

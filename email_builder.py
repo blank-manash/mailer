@@ -1,4 +1,4 @@
-from config import *
+from config import USER, PASSWORD, Emails, DEBUG, RECIPIENT, CC
 import yagmail
 
 

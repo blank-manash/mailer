@@ -1,30 +1,31 @@
-import logging
 import azure.functions as func
 from main import main
 from flow_chart import flow_reponse
+from config import get_logger
 import json
 
+logger = get_logger()
 app = func.FunctionApp()
 
 
 @app.function_name("CronMail")
 @app.schedule(
-    schedule="0 30 14 * * *",
-    arg_name="myTimer",
+    schedule="0 30 7 * * *",
+    arg_name="my_timer",
     run_on_startup=False,
     use_monitor=False,
 )
-def daily_mail(myTimer: func.TimerRequest) -> None:
-    if myTimer.past_due:
-        logging.info("The timer is past due!")
+def daily_mail(my_timer: func.TimerRequest) -> None:
+    if my_timer.past_due:
+        logger.info("The timer is past due!")
     main()
-    logging.info("Python timer trigger function executed.")
+    logger.info("Python timer trigger function executed.")
 
 
 @app.function_name("HttpMail")
 @app.route(route="send", auth_level=func.AuthLevel.ANONYMOUS)
 def http_mail(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info("Running HTTP Trigger")
+    logger.info("Running HTTP Trigger")
     main()
     return func.HttpResponse("HTTP trigger executed successfully.", status_code=200)
 
@@ -32,7 +33,7 @@ def http_mail(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name("CreateFlowChart")
 @app.route(route="create-flow", auth_level=func.AuthLevel.ANONYMOUS)
 def create_flow(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info("Creating Flow")
+    logger.info("Creating Flow")
     headers = {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",

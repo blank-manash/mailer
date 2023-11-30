@@ -1,6 +1,7 @@
-from config import GPTModels, get_chat_client
+from config import GPTModels, get_chat_client, get_logger
 import json
-import logging
+
+logger = get_logger()
 
 
 def create_prompt(text: str) -> str:
@@ -23,7 +24,7 @@ def flow_reponse(text):
     answer = str(gpt(prompt)).strip()
     try:
         response = json.loads(answer)
-        logging.info("Fetched Response from OPENAI")
+        logger.info("Fetched Response from OPENAI")
         if (not response["nodes"]) or (not response["links"]):
             return {"data": "Invalid Data From OpenAI", "success": False}
         return {"data": response, "success": True}
