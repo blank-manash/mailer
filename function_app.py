@@ -11,12 +11,12 @@ app = func.FunctionApp()
 @app.function_name("CronMail")
 @app.schedule(
     schedule="0 30 7 * * *",
-    arg_name="my_timer",
+    arg_name="myTimer",
     run_on_startup=False,
-    use_monitor=False,
+    use_monitor=True,
 )
-def daily_mail(my_timer: func.TimerRequest) -> None:
-    if my_timer.past_due:
+def daily_mail(myTimer: func.TimerRequest) -> None:
+    if myTimer.past_due:
         logger.info("The timer is past due!")
     main()
     logger.info("Python timer trigger function executed.")
@@ -27,7 +27,9 @@ def daily_mail(my_timer: func.TimerRequest) -> None:
 def http_mail(req: func.HttpRequest) -> func.HttpResponse:
     logger.info("Running HTTP Trigger")
     main()
-    return func.HttpResponse("HTTP trigger executed successfully.", status_code=200)
+    return func.HttpResponse(
+        "HTTP trigger executed successfully.", status_code=200
+    )
 
 
 @app.function_name("CreateFlowChart")
@@ -52,7 +54,10 @@ def create_flow(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         return func.HttpResponse(
             json.dumps(
-                {"data": f"Error in Receiving Data: {str(e)}", "success": False}
+                {
+                    "data": f"Error in Receiving Data: {str(e)}",
+                    "success": False,
+                }
             ),
             status_code=400,
             headers=headers,

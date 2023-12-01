@@ -1,9 +1,11 @@
 from enum import Enum
-from config import *
+from config import (
+    get_chat_client,
+    GPTModels,
+)
 from current_affairs import CurrentAffairs
 from email_builder import EmailBuilder
 from datetime import datetime
-import logging
 
 
 def get_days():
@@ -35,7 +37,7 @@ def add_greeting():
 
 def add_summary(prompt):
     mail.append_subheading("Summary")
-    summary = gpt(prompt, max_tokens=None)
+    summary = gpt(prompt)
     mail.append_paragraph(summary)
 
 
