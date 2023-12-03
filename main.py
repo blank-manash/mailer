@@ -24,14 +24,12 @@ def add_greeting():
     """
     Function to add a greeting to the mail.
     """
-    greeting = gpt(
-        """
+    greeting = gpt("""
         Create a greeting for the mail for my Sweetheart. It's daily mail, keep it short and sweet
         Tone: Conversational, Friendly, Human
         DO NOT USE any placeholders. Do not use new lines.
         My Name is Manash.
-        """
-    )
+        """)
     mail.append_paragraph(greeting)
 
 
@@ -87,7 +85,10 @@ def store_history():
         mail.append_heading("History")
         content = []
         for item in items:
-            info = f"{str(item['date']).strip()}: {str(item['description']).strip()}"
+            info = (
+                f"{str(item['date']).strip()}:"
+                f" {str(item['description']).strip()}"
+            )
             content.append(info)
         mail.append_list(content)
 
@@ -109,12 +110,13 @@ def add_conclusion():
     """
     prompt = f"""Create a conclusion paragraph for a mail for my Sweetheart.
 My Name is Manash. DO NOT USE any placeholders, DO NOT USE new lines. DO NOT Introduce
-It's daily mail, keep it short and sweet, we met on 25 December 2019, i.e {get_days()} we've met.
+It's daily mail, keep it short and sweet.
 Tone: Conversational, Friendly, Human
     """
     conclusion = (
         gpt(prompt)
-        + "<br><br> <b>P.S</b>: AI Can be Dumb. Ignore if it's stupid. I still love you. <br>"
+        + "<br><br> <b>P.S</b>: AI Can be Dumb. Ignore if it's stupid. I still"
+        " love you. <br>"
     )
     mail.append_paragraph(conclusion)
 

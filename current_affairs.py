@@ -10,10 +10,10 @@ class CurrentAffairs:
         url = self.base_url + endpoint
         response = requests.get(url, headers=self._get_headers())
         if response.status_code == 200:
+            time.sleep(5)
             return response.json()
         else:
             logger.error(f"Error {response.status_code}: {response.text}")
-        time.sleep(15)
 
     def get(self, key):
         item = self.items[key]
@@ -40,7 +40,10 @@ class CurrentAffairs:
             self.items[key] = response
 
     def _get_headers(self) -> dict[str, str]:
-        return {"X-RapidAPI-Key": RAPID_API_KEY, "X-RapidAPI-Host": RAPID_API_HOST}
+        return {
+            "X-RapidAPI-Key": RAPID_API_KEY,
+            "X-RapidAPI-Host": RAPID_API_HOST,
+        }
 
     def get_recent_current_affairs(self) -> list[str]:
         """
