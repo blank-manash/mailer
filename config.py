@@ -97,3 +97,11 @@ def get_logger():
     logger.addHandler(azure_handler)
 
     return logger
+
+
+def get_headers():
+    return {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+    }

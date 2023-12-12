@@ -27,14 +27,13 @@ def add_greeting():
     greeting = gpt("""
         Create a greeting for the mail for my Sweetheart. It's daily mail, keep it short and sweet
         Tone: Conversational, Friendly, Human
-        DO NOT USE any placeholders. Do not use new lines.
-        My Name is Manash.
+        DO NOT USE any placeholders. Do not use new lines. Do not assume time of day.
+        My Name is Manash. Her name is Gamakshi.
         """)
     mail.append_paragraph(greeting)
 
 
 def add_summary(prompt):
-    mail.append_subheading("Summary")
     summary = gpt(prompt)
     mail.append_paragraph(summary)
 
@@ -47,7 +46,6 @@ def store_recent_affairs():
     if not response:
         return
     mail.append_heading("Recent Current Affairs")
-    mail.append_list(response)
     prompt = f"""
 Create a Interesting, Informative, Brief and Creative Summary of the above Recent Current Affairs from India
 Keep it within 100 words.
@@ -64,7 +62,6 @@ def store_international_affairs():
     response = news.get_international_current_affairs()
     if response:
         mail.append_heading("International Current Affairs")
-        mail.append_list(response)
 
         prompt = f"""
 Create a Interesting, Informative, Brief and Creative Summary of the above International Current Affairs.
