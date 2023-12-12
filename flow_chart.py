@@ -16,7 +16,7 @@ The flow chart should optimize learning. Keep it simple, clear and detailed. Kee
     )
 
 
-gpt = get_chat_client(GPTModels.GPT4.value, "json_object")
+gpt = get_chat_client(model=GPTModels.GPT4.value, response_type="json_object")
 
 
 def flow_reponse(text):

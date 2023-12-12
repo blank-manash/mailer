@@ -14,7 +14,7 @@ def get_days():
     return (current_date - start_date).days
 
 
-gpt = get_chat_client(GPTModels.GPT3.value)
+gpt = get_chat_client(model=GPTModels.GPT3.value)
 
 mail = EmailBuilder.get_instance()
 news = CurrentAffairs()

@@ -19,7 +19,7 @@ def get(key: str) -> str:
     return client.get_configuration_setting(key=key).value
 
 
-def get_chat_client(model: str, response_type="text"):
+def get_chat_client(model: str, response_type="text", temperature=1):
     gpt_client = OpenAI(api_key=OPENAI_API_KEY)
 
     def _gpt_client(prompt: str):
@@ -36,6 +36,7 @@ def get_chat_client(model: str, response_type="text"):
                 model=model,
                 max_tokens=None,
                 response_format={"type": response_type},
+                temperature=temperature,
             )
             answer = str(response.choices[0].message.content).strip()
             logging.info(f"""

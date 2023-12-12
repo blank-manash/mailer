@@ -66,17 +66,23 @@ def suggest(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(status_code=204, headers=headers)
     try:
         text = req.get_json()["text"]
-        prompt = f"""Create a autocomplete suggestion based on this text:
-        {text}
-
-        Your response should only be the suggestion. It will be directly fed to user.
-        DO NOT Write anything else. Create a Completion under 100 words.
-        """.replace(text=text)
-        gpt = get_chat_client(GPTModels.GPT4)
-        response = {"suggestion": gpt(prompt=prompt)}
+        prompt = f"""Create a autocomplete suggestion based on the text, you are expected to be poetic if neceesary.  Your response should only be the suggestion. It will be directly fed to user.
+DO NOT Write anything else. Create a Completion between 5 and 100 words.
+BEGIN TEXT
+{text}
+END TEXT
+        """.format(
+            text=text
+        )
+        gpt = get_chat_client(model=GPTModels.GPT3.value, temperature=1.5)
+        answer = gpt(prompt=prompt)
+        if answer.startswith('"') and answer.endswith('"'):
+            answer = answer[1:-1]
+        response = {"suggestion": answer}
         response = json.dumps(response)
         return func.HttpResponse(response, status_code=200, headers=headers)
     except Exception as e:
+        logger.error("Error in Suggestions", str(e))
         return func.HttpResponse(
             json.dumps(
                 {
